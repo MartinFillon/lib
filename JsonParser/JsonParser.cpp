@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <ios>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -170,12 +171,15 @@ namespace lib {
 
     void Json::Parser::parseBool(Json::JsonObject *obj, Json::JsonArray *arr)
     {
-        JsonValue bl = false;
         if (strncmp(_str.c_str() + _index, "true", 4) == 0) {
-            bl = true;
+            JsonValue bl = true;
+            getChar();
+            appendValue(obj, arr, bl);
             _index += 4;
         } else if (strncmp(_str.c_str() + _index, "false", 4) == 0) {
-            bl = false;
+            JsonValue bl = true;
+            getChar();
+            appendValue(obj, arr, bl);
             _index += 5;
         } else {
             throw InvalidTokenException(
@@ -183,8 +187,6 @@ namespace lib {
                 std::to_string(_index)
             );
         }
-        getChar();
-        appendValue(obj, arr, bl);
     }
 
     void Json::Parser::parseArray(Json::JsonObject *obj, Json::JsonArray *arr)
@@ -259,7 +261,7 @@ std::ostream &operator<<(std::ostream &os, const lib::Json::JsonValue &v)
                               std::string>)
                 os << "\"" << arg << "\"";
             else
-                os << arg;
+                os << std::boolalpha << arg;
         },
         v
     );

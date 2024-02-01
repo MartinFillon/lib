@@ -1,3 +1,6 @@
 main.cpp
 *.json
 .cache
+*.o
+libmy.a
+test

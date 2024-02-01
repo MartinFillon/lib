@@ -8,7 +8,10 @@
 #ifndef ARGSPARSER_HPP_
 #define ARGSPARSER_HPP_
 
+#include <ios>
+#include <iostream>
 #include <map>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -42,6 +45,7 @@ namespace lib {
 
             Arg(Json::JsonObject _conf)
             {
+                std::cout << _conf << std::endl;
                 name = _conf.get<std::string>("name");
                 description = _conf.get<std::string>("description");
                 required = _conf.get<bool>("required");
@@ -99,9 +103,14 @@ namespace lib {
             ** @brief Get the other arguments
             ** @return The other arguments
             */
-            std::vector<std::string> getOtherArgs()
+            const std::vector<std::string> getOtherArgs() const
             {
                 return _otherArgs;
+            }
+
+            const std::map<std::string, Arg> &getArgs() const
+            {
+                return _args;
             }
 
           protected:
@@ -116,5 +125,37 @@ namespace lib {
         };
     } // namespace Args
 } // namespace lib
+
+inline std::ostream &operator<<(std::ostream &os, const lib::Args::Arg &arg)
+{
+    os << arg.name << ": " << std::endl;
+    os << "long: "
+       << "--" << arg.name << std::endl;
+    os << "short: "
+       << "-" << arg.shortName << std::endl;
+    os << "description: " << arg.description << std::endl;
+    os << std::boolalpha << "required: " << arg.required << std::endl;
+    os << "hasValue: " << arg.hasValue << std::endl;
+    os << "value: " << arg.value << std::endl;
+    return os;
+}
+
+inline std::ostream &operator<<(
+    std::ostream &os,
+    const lib::Args::Parser &parser
+)
+{
+    os << "Args: " << std::endl;
+    const auto &args = parser.getArgs();
+    for (auto it = args.begin(); it != args.end(); it++) {
+        os << it->second << std::endl;
+    }
+    os << "Other args: " << std::endl;
+    const auto &otherArgs = parser.getOtherArgs();
+    for (auto it = otherArgs.begin(); it != otherArgs.end(); it++) {
+        os << *it << std::endl;
+    }
+    return os;
+}
 
 #endif /* !ARGSPARSER_HPP_ */

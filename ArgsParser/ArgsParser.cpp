@@ -56,6 +56,7 @@ namespace lib {
                             "Missing value for argument " + it->second.name
                         );
                     it->second.value = _av[*index + 1];
+                    *index += 1;
                 }
                 return true;
             }
