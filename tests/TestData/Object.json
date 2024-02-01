@@ -1,0 +1,18 @@
+{
+    "Name": "bin",
+    "Version": 0.1,
+    "Needed": true,
+    "V": 2.3,
+    "args": [
+        {
+            "name": "caca",
+            "description": "test arg",
+            "required": false,
+            "hasValue": false,
+            "Short": "c"
+        }
+    ],
+    "obj": {
+        "test": "test"
+    }
+}
