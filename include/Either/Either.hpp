@@ -40,7 +40,7 @@ namespace lib {
 
         Either(L *left) : _left(left), _isLeft(true) {}
 
-        Either(R *right) : _right(right), _isLeft(false) {}
+        Either(R *right) : _isLeft(false), _right(right) {}
 
         /**
         ** @brief Unwrap the left value
@@ -126,6 +126,26 @@ namespace lib {
                 f(_left, nullptr);
             else
                 f(nullptr, _right);
+        }
+
+        /**
+        ** @brief Map the Either
+        ** @param f The function to apply
+        **/
+        void map(std::function<void(L *)> f)
+        {
+            if (_isLeft)
+                f(_left);
+        }
+
+        /**
+        ** @brief Map the Either
+        ** @param f The function to apply
+        **/
+        void map(std::function<void(R *)> f)
+        {
+            if (!_isLeft)
+                f(_right);
         }
 
         bool operator==(const Either<L, R> &other) const
