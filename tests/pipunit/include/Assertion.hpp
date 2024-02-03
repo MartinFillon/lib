@@ -33,6 +33,13 @@ namespace pipunit {
             return res;
         };
 
+        Assertion operator&&(const Assertion &a)
+        {
+            return Assertion(
+                _result && a._result, (_assert + " && " + a._assert)
+            );
+        }
+
       protected:
         bool _result = false;
         std::string _assert;

@@ -5,9 +5,9 @@
 ** JsonParserSpec
 */
 
+#include "JsonParser/JsonParser.hpp"
 #include <string>
 #include <vector>
-#include "JsonParser/JsonParser.hpp"
 #include "pipunit/include/Assertion.hpp"
 #include "pipunit/include/Test.hpp"
 
@@ -103,7 +103,8 @@ pipunit::Assertion json_parsing_assert_invalid_token(
     try {
         parser.parseJson();
     } catch (lib::Json::InvalidTokenException &e) {
-        return pipunit::assert_true(true);
+        return pipunit::assert_true(true) &&
+            pipunit::assert_true(e.what() != nullptr);
     }
     return pipunit::assert_true(false);
 }
@@ -116,6 +117,34 @@ pipunit::Assertion json_parsing_assert_invalid_string_token(
     (void)cout;
     (void)cerr;
     lib::Json::Parser parser("tests/TestData/BadString.json");
+    try {
+        parser.parseJson();
+    } catch (lib::Json::InvalidTokenException &e) {
+        return pipunit::assert_true(true);
+    }
+    return pipunit::assert_true(false);
+}
+
+pipunit::Assertion json_parsing_stdout_print(
+    pipunit::CoutRedirect *cout,
+    pipunit::CerrRedirect *cerr
+)
+{
+    (void)cerr;
+    lib::Json::Parser parser("tests/TestData/Array.json");
+    parser.parseJson();
+    std::cout << parser.getJson() << std::endl;
+    return pipunit::assert_stdout_equals(cout, "{\"arr\": [1,\n2,\n3]}\n");
+}
+
+pipunit::Assertion json_parsing_file_doesnt_exist(
+    pipunit::CoutRedirect *cout,
+    pipunit::CerrRedirect *cerr
+)
+{
+    (void)cout;
+    (void)cerr;
+    lib::Json::Parser parser("tests/TestData/DoesntExist.json");
     try {
         parser.parseJson();
     } catch (lib::Json::InvalidTokenException &e) {
@@ -187,6 +216,22 @@ std::vector<pipunit::Test> JsonParserSpec()
         "test json invalid string token",
         "testing if a json invalid string token is detected",
         json_parsing_assert_invalid_string_token,
+        NULL,
+        NULL
+    ));
+
+    tests.push_back(pipunit::Test(
+        "test json stdout print",
+        "testing if a json is printed correctly",
+        json_parsing_stdout_print,
+        pipunit::redirectStdout,
+        NULL
+    ));
+
+    tests.push_back(pipunit::Test(
+        "test json file doesnt exist",
+        "testing if a json file that doesn't exist is detected",
+        json_parsing_file_doesnt_exist,
         NULL,
         NULL
     ));

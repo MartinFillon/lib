@@ -4,3 +4,7 @@ main.cpp
 *.o
 libmy.a
 test
+unit_tests
+*.gcno
+*.gcda
+libpipunit.a
