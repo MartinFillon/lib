@@ -10,6 +10,7 @@ CC = g++
 NAME = ../unit_tests
 
 TESTS_SRC 	= 	JsonParser.spec.cpp\
+				Either.spec.cpp\
 				Main.cpp\
 
 TESTS_OBJ = $(TESTS_SRC:.cpp=.o)
