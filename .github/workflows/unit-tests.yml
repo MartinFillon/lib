@@ -2,16 +2,16 @@ name: unit-tests
 
 on:
     push:
-        branches: [ main ]
+        branches: [ master ]
     pull_request:
-        branches: [ main ]
+        branches: [ master ]
 
 jobs:
     unit-tests:
         runs-on: ubuntu-latest
 
         container:
-            image: ghcr.io/epitechcontent/epitest-docker:latest
+            image: epitechcontent/epitest-docker
         steps:
             - name: Checkout the repo
               uses: actions/checkout@v3
@@ -20,4 +20,3 @@ jobs:
             - name: run the tests
               run: |
                 make tests_run
-                
