@@ -25,7 +25,7 @@ namespace lib {
         std::stringstream buffer;
 
         if (!file.is_open()) {
-            return;
+            throw InvalidTokenException("File not found");
         }
 
         buffer << file.rdbuf();
@@ -177,7 +177,7 @@ namespace lib {
             appendValue(obj, arr, bl);
             _index += 4;
         } else if (strncmp(_str.c_str() + _index, "false", 4) == 0) {
-            JsonValue bl = true;
+            JsonValue bl = false;
             getChar();
             appendValue(obj, arr, bl);
             _index += 5;

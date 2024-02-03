@@ -23,8 +23,10 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ)
 
-unit_tests:
+tests_run:
 	make -C ./tests
+	./unit_tests
+	gcovr --exclude tests
 
 clean:
 	$(RM) $(OBJ)
