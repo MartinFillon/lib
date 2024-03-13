@@ -62,6 +62,7 @@ namespace lib {
 
             bool operator==(const JsonObject &other) const;
             bool operator!=(const JsonObject &other) const;
+            JsonObject &operator+=(const JsonObject &other);
         };
 
         class JsonArray {
