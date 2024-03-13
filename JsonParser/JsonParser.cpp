@@ -250,6 +250,14 @@ namespace lib {
     {
         return !(rhs == *this);
     }
+
+    Json::JsonObject &Json::JsonObject::operator+=(const JsonObject &rhs)
+    {
+        for (auto it : rhs.data) {
+            this->data[it.first] = it.second;
+        }
+        return *this;
+    }
 } // namespace lib
 
 std::ostream &operator<<(std::ostream &os, const lib::Json::JsonValue &v)
